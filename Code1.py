@@ -1,61 +1,149 @@
-naren-
+you are working-
 
-def is_matching_pair(opening, closing):
-    # Check if the pair of brackets matches
-    return (opening == '(' and closing == ')') or \
-           (opening == '{' and closing == '}') or \
-           (opening == '[' and closing == ']')
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
 
-def are_brackets_balanced(expression):
-    stack = []
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    # Method to insert data at the end of the linked list
+    def insert(self, data):
+        new_node = Node(data)
+        if not self.head:
+            self.head = new_node
+            return
+        last_node = self.head
+        while last_node.next:
+            last_node = last_node.next
+        last_node.next = new_node
+
+    # Method to display the linked list elements
+    def display(self):
+        current_node = self.head
+        timestamps = []
+        while current_node:
+            timestamps.append(str(current_node.data))
+            current_node = current_node.next
+        print(" ".join(timestamps))
+
+# Function to sort the timestamps and insert into the linked list
+def sort_ticket_requests(n, timestamps):
+    linked_list = LinkedList()
+
+    # Insert each timestamp into the linked list
+    for timestamp in timestamps:
+        linked_list.insert(timestamp)
+
+    # Convert linked list to a list for sorting
+    current_node = linked_list.head
+    timestamp_list = []
+    while current_node:
+        timestamp_list.append(current_node.data)
+        current_node = current_node.next
+
+    # Sort the timestamps
+    timestamp_list.sort()
+
+    # Insert the sorted timestamps back into the linked list
+    linked_list = LinkedList()
+    for timestamp in timestamp_list:
+        linked_list.insert(timestamp)
+
+    # Display the sorted linked list
+    linked_list.display()
+
+# Main Function
+def main():
+    # Reading input
+    n = int(input())  # Number of ticket requests
+    timestamps = list(map(int, input().split()))  # Ticket request timestamps
+
+    # Sort and display the sorted timestamps
+    sort_ticket_requests(n, timestamps)
+
+# Calling main to run the program
+if __name__ == "__main__":
+    main()
+
+
+an automated-
+
+from collections import deque
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+class BinaryTree:
+    def __init__(self):
+        self.root = None
     
-    for char in expression:
-        # Push opening brackets onto the stack
-        if char in "({[":
-            stack.append(char)
-        # For closing brackets, check if the stack is empty or mismatched
-        elif char in ")}]":
-            if not stack or not is_matching_pair(stack.pop(), char):
-                return False
+    def insert(self, data):
+        new_node = Node(data)
+        if not self.root:
+            self.root = new_node
+            return
+        
+        # Level-order insertion
+        queue = deque([self.root])
+        while queue:
+            current = queue.popleft()
+            
+            if not current.left:
+                current.left = new_node
+                return
+            else:
+                queue.append(current.left)
+            
+            if not current.right:
+                current.right = new_node
+                return
+            else:
+                queue.append(current.right)
+
+    def reverse_level_order(self):
+        if not self.root:
+            return []
+        
+        # Standard level-order traversal
+        queue = deque([self.root])
+        result = []
+        
+        while queue:
+            current = queue.popleft()
+            result.append(current.data)
+            
+            if current.left:
+                queue.append(current.left)
+            if current.right:
+                queue.append(current.right)
+        
+        # Return the reverse of the result
+        return result[::-1]
     
-    # If stack is empty, brackets are balanced
-    return len(stack) == 0
 
-# Input
-expression = input("Enter the expression: ")
+def main():
+    # Read input
+    n = int(input())  # Number of product categories
+    categories = list(map(int, input().split()))  # Product category IDs
 
-# Output the result
-print(f"Expression: {expression}")
-if are_brackets_balanced(expression):
-    print("Brackets are balanced")
-else:
-    print("Brackets are not balanced")
-
-
-neha-
-
-def count_occurrences(s, c, index=0, count=0):
-    # Base case: If we reach the end of the string
-    if index == len(s):
-        return count
+    # Create a binary tree and insert the categories
+    tree = BinaryTree()
     
-    # Increment count if the character matches
-    if s[index] == c:
-        count += 1
+    for category in categories:
+        tree.insert(category)
     
-    # Recursive call to check the next character
-    return count_occurrences(s, c, index + 1, count)
+    # Get the reverse level order traversal
+    reverse_level_order = tree.reverse_level_order()
+    
+    # Print the result
+    print(" ".join(map(str, reverse_level_order)))
 
-# Input
-string = input("Enter the string: ")
-char = input("Enter the character to count: ")
-
-# Ensure the input character is valid
-if len(char) != 1:
-    print("Error: Please enter a single character.")
-else:
-    # Call the function and print the result
-    result = count_occurrences(string, char)
-    print(f"The character '{char}' appears {result} times.")
-
-
+# Calling main to run the program
+if __name__ == "__main__":
+    main()
